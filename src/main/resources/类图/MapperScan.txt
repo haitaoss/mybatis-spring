@@ -1,0 +1,209 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class ClassPathMapperScanner {
+  - sqlSessionTemplate: SqlSessionTemplate
+  - sqlSessionTemplateBeanName: String
+  - defaultScope: String
+  - addToConfig: boolean
+  - sqlSessionFactoryBeanName: String
+  - printWarnLogIfNotFoundMappers: boolean
+  - mapperFactoryBeanClass: Class<MapperFactoryBean>
+  - LOGGER: Logger
+  ~ FACTORY_BEAN_OBJECT_TYPE: String
+  - sqlSessionFactory: SqlSessionFactory
+  - annotationClass: Class<Annotation>
+  - lazyInitialization: boolean
+  - markerInterface: Class<?>
+  + setAddToConfig(boolean): void
+  + setMapperFactoryBean(MapperFactoryBean<?>): void
+  + registerFilters(): void
+  + setMapperFactoryBeanClass(Class<MapperFactoryBean>): void
+  + setSqlSessionTemplateBeanName(String): void
+  + setSqlSessionFactoryBeanName(String): void
+  + setLazyInitialization(boolean): void
+  + setMarkerInterface(Class<?>): void
+  + setPrintWarnLogIfNotFoundMappers(boolean): void
+  + setDefaultScope(String): void
+  + setSqlSessionFactory(SqlSessionFactory): void
+  - processBeanDefinitions(Set<BeanDefinitionHolder>): void
+  # isCandidateComponent(AnnotatedBeanDefinition): boolean
+  # checkCandidate(String, BeanDefinition): boolean
+  + doScan(String[]): Set<BeanDefinitionHolder>
+  + setSqlSessionTemplate(SqlSessionTemplate): void
+  + setAnnotationClass(Class<Annotation>): void
+}
+class MapperFactoryBean<T> {
+  - mapperInterface: Class<T>
+  - addToConfig: boolean
+  # checkDaoConfig(): void
+  + getObjectType(): Class<T>?
+  + getMapperInterface(): Class<T>
+  + setMapperInterface(Class<T>): void
+  + getObject(): T?
+  + setAddToConfig(boolean): void
+  + isAddToConfig(): boolean
+  + isSingleton(): boolean
+}
+annotation MapperScan << annotation >> {
+  + basePackages(): String[]
+  + nameGenerator(): Class<BeanNameGenerator>
+  + basePackageClasses(): Class<?>[]
+  + value(): String[]
+  + sqlSessionTemplateRef(): String
+  + sqlSessionFactoryRef(): String
+  + annotationClass(): Class<Annotation>
+  + markerInterface(): Class<?>
+  + lazyInitialization(): String
+  + defaultScope(): String
+  + factoryBean(): Class<MapperFactoryBean>
+}
+class MapperScannerConfigurer {
+  - markerInterface: Class<?>
+  - defaultScope: String
+  - sqlSessionFactoryBeanName: String
+  - processPropertyPlaceHolders: boolean
+  - nameGenerator: BeanNameGenerator
+  - basePackage: String
+  - lazyInitialization: String
+  - sqlSessionTemplate: SqlSessionTemplate
+  - addToConfig: boolean
+  - sqlSessionFactory: SqlSessionFactory
+  - sqlSessionTemplateBeanName: String
+  - mapperFactoryBeanClass: Class<MapperFactoryBean>
+  - annotationClass: Class<Annotation>
+  - beanName: String
+  - applicationContext: ApplicationContext
+  - processPropertyPlaceHolders(): void
+  + setBeanName(String): void
+  + setAddToConfig(boolean): void
+  + setBasePackage(String): void
+  + postProcessBeanDefinitionRegistry(BeanDefinitionRegistry): void
+  + setSqlSessionFactory(SqlSessionFactory): void
+  + getNameGenerator(): BeanNameGenerator
+  + afterPropertiesSet(): void
+  + setMarkerInterface(Class<?>): void
+  + setSqlSessionTemplate(SqlSessionTemplate): void
+  + setDefaultScope(String): void
+  - getEnvironment(): Environment
+  + setMapperFactoryBeanClass(Class<MapperFactoryBean>): void
+  + setNameGenerator(BeanNameGenerator): void
+  + setLazyInitialization(String): void
+  + setSqlSessionFactoryBeanName(String): void
+  + postProcessBeanFactory(ConfigurableListableBeanFactory): void
+  + setAnnotationClass(Class<Annotation>): void
+  + setProcessPropertyPlaceHolders(boolean): void
+  + setApplicationContext(ApplicationContext): void
+  - getPropertyValue(String, PropertyValues): String?
+  + setSqlSessionTemplateBeanName(String): void
+}
+class MapperScannerRegistrar {
+  + setResourceLoader(ResourceLoader): void
+  + registerBeanDefinitions(AnnotationMetadata, BeanDefinitionRegistry): void
+  ~ registerBeanDefinitions(AnnotationMetadata, AnnotationAttributes, BeanDefinitionRegistry, String): void
+  - getDefaultBasePackage(AnnotationMetadata): String
+  - generateBaseBeanName(AnnotationMetadata, int): String
+}
+
+interface SqlSessionFactory << interface >> {
+  + openSession(ExecutorType, Connection): SqlSession
+  + openSession(Connection): SqlSession
+  + openSession(ExecutorType, boolean): SqlSession
+  + openSession(ExecutorType): SqlSession
+  + getConfiguration(): Configuration
+  + openSession(): SqlSession
+  + openSession(boolean): SqlSession
+  + openSession(TransactionIsolationLevel): SqlSession
+  + openSession(ExecutorType, TransactionIsolationLevel): SqlSession
+}
+class SqlSessionInterceptor {
+  + invoke(Object, Method, Object[]): Object
+}
+class SqlSessionTemplate {
+  - exceptionTranslator: PersistenceExceptionTranslator
+  - executorType: ExecutorType
+  - sqlSessionProxy: SqlSession
+  - sqlSessionFactory: SqlSessionFactory
+  + update(String, Object): int
+  + selectCursor(String, Object): Cursor<T>
+  + update(String): int
+  + rollback(): void
+  + selectOne(String): T
+  + selectMap(String, Object, String): Map<K, V>
+  + clearCache(): void
+  + selectCursor(String): Cursor<T>
+  + selectOne(String, Object): T
+  + selectMap(String, Object, String, RowBounds): Map<K, V>
+  + selectList(String, Object): List<E>
+  + selectList(String, Object, RowBounds): List<E>
+  + selectMap(String, String): Map<K, V>
+  + commit(): void
+  + getSqlSessionFactory(): SqlSessionFactory
+  + select(String, Object, ResultHandler): void
+  + select(String, Object, RowBounds, ResultHandler): void
+  + delete(String, Object): int
+  + selectCursor(String, Object, RowBounds): Cursor<T>
+  + close(): void
+  + destroy(): void
+  + getExecutorType(): ExecutorType
+  + delete(String): int
+  + select(String, ResultHandler): void
+  + getPersistenceExceptionTranslator(): PersistenceExceptionTranslator
+  + insert(String, Object): int
+  + getMapper(Class<T>): T
+  + rollback(boolean): void
+  + insert(String): int
+  + selectList(String): List<E>
+  + flushStatements(): List<BatchResult>
+  + getConfiguration(): Configuration
+  + commit(boolean): void
+  + getConnection(): Connection
+}
+
+class DaoSupport {
+  # logger: Log
+  + afterPropertiesSet(): void
+  # checkDaoConfig(): void
+  # initDao(): void
+}
+interface InitializingBean << interface >> {
+  + afterPropertiesSet(): void
+}
+class SqlSessionDaoSupport {
+  - sqlSessionTemplate: SqlSessionTemplate
+  + getSqlSessionFactory(): SqlSessionFactory?
+  + getSqlSessionTemplate(): SqlSessionTemplate
+  # createSqlSessionTemplate(SqlSessionFactory): SqlSessionTemplate
+  + getSqlSession(): SqlSession
+  # checkDaoConfig(): void
+  + setSqlSessionFactory(SqlSessionFactory): void
+  + setSqlSessionTemplate(SqlSessionTemplate): void
+}
+
+
+interface FactoryBean<T> << interface >> {
+   singleton: boolean
+   object: T?
+   objectType: Class<?>?
+}
+
+DaoSupport            -[#008200,dashed]-^  InitializingBean
+SqlSessionDaoSupport  -[#000082,plain]-^  DaoSupport
+SqlSessionDaoSupport  *--  SqlSessionTemplate
+SqlSessionTemplate  *--  SqlSessionFactory
+SqlSessionTemplate  *--  SqlSessionInterceptor
+MapperFactoryBean   -[#000082,plain]-^  SqlSessionDaoSupport
+MapperFactoryBean            -[#008200,dashed]-^  FactoryBean
+MapperScan *--       MapperScannerRegistrar
+MapperScannerRegistrar *--        MapperScannerConfigurer
+MapperScannerConfigurer *--        ClassPathMapperScanner
+ClassPathMapperScanner *--        MapperFactoryBean
+@enduml
+
+
+
+
+

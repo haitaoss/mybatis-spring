@@ -22,12 +22,12 @@
   <parent>
     <groupId>org.mybatis</groupId>
     <artifactId>mybatis-parent</artifactId>
-    <version>37</version>
+    <version>36</version>
     <relativePath />
   </parent>
 
   <artifactId>mybatis-spring</artifactId>
-  <version>3.0.2-SNAPSHOT</version>
+  <version>3.0.1</version>
   <packaging>jar</packaging>
 
   <name>mybatis-spring</name>
@@ -80,7 +80,7 @@
     <url>http://github.com/mybatis/spring</url>
     <connection>scm:git:ssh://github.com/mybatis/spring.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/mybatis/spring.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>mybatis-spring-3.0.1</tag>
   </scm>
   <issueManagement>
     <system>GitHub Issue Management</system>
@@ -110,7 +110,7 @@
     <java.release.version>17</java.release.version>
 
     <mybatis.version>3.5.11</mybatis.version>
-    <spring.version>6.0.3</spring.version>
+    <spring.version>6.0.2</spring.version>
     <spring-batch.version>5.0.0</spring-batch.version>
     <module.name>org.mybatis.spring</module.name>
 
@@ -120,7 +120,7 @@
     <maven.compiler.parameters>true</maven.compiler.parameters>
 
     <!-- Reproducible Builds -->
-    <project.build.outputTimestamp>1670546764</project.build.outputTimestamp>
+    <project.build.outputTimestamp>1670546724</project.build.outputTimestamp>
   </properties>
 
   <dependencies>
@@ -226,7 +226,7 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
-      <version>2.0.6</version>
+      <version>2.0.5</version>
       <scope>test</scope>
     </dependency>
 
@@ -240,7 +240,7 @@
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
-      <version>3.24.1</version>
+      <version>3.23.1</version>
       <scope>test</scope>
     </dependency>
 

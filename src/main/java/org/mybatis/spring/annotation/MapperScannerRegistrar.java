@@ -15,12 +15,6 @@
  */
 package org.mybatis.spring.annotation;
 
-import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.mybatis.spring.mapper.ClassPathMapperScanner;
 import org.mybatis.spring.mapper.MapperFactoryBean;
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
@@ -37,6 +31,12 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
+
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * A {@link ImportBeanDefinitionRegistrar} to allow annotation configuration of MyBatis mapper scanning. Using
@@ -85,20 +85,24 @@ public class MapperScannerRegistrar implements ImportBeanDefinitionRegistrar, Re
     builder.addPropertyValue("processPropertyPlaceHolders", true);
 
     Class<? extends Annotation> annotationClass = annoAttrs.getClass("annotationClass");
+    // 默认值，就不设置
     if (!Annotation.class.equals(annotationClass)) {
       builder.addPropertyValue("annotationClass", annotationClass);
     }
 
+    // 默认值，就不设置
     Class<?> markerInterface = annoAttrs.getClass("markerInterface");
     if (!Class.class.equals(markerInterface)) {
       builder.addPropertyValue("markerInterface", markerInterface);
     }
 
+    // 默认值，就不设置
     Class<? extends BeanNameGenerator> generatorClass = annoAttrs.getClass("nameGenerator");
     if (!BeanNameGenerator.class.equals(generatorClass)) {
       builder.addPropertyValue("nameGenerator", BeanUtils.instantiateClass(generatorClass));
     }
 
+    // 默认值，就不设置
     Class<? extends MapperFactoryBean> mapperFactoryBeanClass = annoAttrs.getClass("factoryBean");
     if (!MapperFactoryBean.class.equals(mapperFactoryBeanClass)) {
       builder.addPropertyValue("mapperFactoryBeanClass", mapperFactoryBeanClass);
@@ -141,6 +145,7 @@ public class MapperScannerRegistrar implements ImportBeanDefinitionRegistrar, Re
     // for spring-native
     builder.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 
+    // 注册 BeanDefinition
     registry.registerBeanDefinition(beanName, builder.getBeanDefinition());
 
   }
@@ -168,7 +173,9 @@ public class MapperScannerRegistrar implements ImportBeanDefinitionRegistrar, Re
           .fromMap(importingClassMetadata.getAnnotationAttributes(MapperScans.class.getName()));
       if (mapperScansAttrs != null) {
         AnnotationAttributes[] annotations = mapperScansAttrs.getAnnotationArray("value");
+        // 遍历注解值
         for (int i = 0; i < annotations.length; i++) {
+          // 处理注解，结果就是注册 MapperScannerConfigurer  到 BeanFactory 中
           registerBeanDefinitions(importingClassMetadata, annotations[i], registry,
               generateBaseBeanName(importingClassMetadata, i));
         }
