@@ -321,7 +321,7 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
         LOGGER.debug(() -> "Enabling autowire by type for MapperFactoryBean with name '" + holder.getBeanName() + "'.");
         /**
          * 在填充bean阶段 {@link AbstractAutowireCapableBeanFactory#populateBean(String, RootBeanDefinition, BeanWrapper)}
-         * 根据类型依赖注入：属性注入(优先回调set方法，没得在反射设置值 Field#set)、回调set开头的方法
+         * 根据类型依赖注入：回调set开头的方法
          * */
         definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
       }
